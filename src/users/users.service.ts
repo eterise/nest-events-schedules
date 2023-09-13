@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto';
 import { AppService } from 'src/app.service';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { UserCreatedEvent } from './events';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class UsersService {
@@ -32,5 +33,10 @@ export class UsersService {
 
     await new Promise<void>((resolve) => setTimeout(() => resolve(), 3000));
     this.logger.log('Welcome gift sent.');
+  }
+
+  @Cron(CronExpression.EVERY_10_SECONDS)
+  deleteExpiredUsers() {
+    this.logger.log('Deleting expired users...');
   }
 }
